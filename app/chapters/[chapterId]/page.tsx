@@ -1,32 +1,36 @@
 'use client';
 
-import React from 'react';
+import React, { use } from 'react';
 import { useRouter } from 'next/navigation';
 import { notFound } from 'next/navigation';
 import Navigation from '../../components/Navigation';
 import SlideShow from '../../components/SlideShow';
 import { courses, getChapterById } from '../../lib/data';
 
-export default function ChapterPage({ params }: { params: { chapterId: string } }) {
+export default function ChapterPage({ params }: { params: Promise<{ chapterId: string }> }) {
+  const resolvedParams = use(params);
+  const chapterId = resolvedParams.chapterId;
   const router = useRouter();
-  const chapter = getChapterById(params.chapterId);
+  const chapter = getChapterById(chapterId);
   
   if (!chapter) {
-    notFound();
+    // クライアントコンポーネントでのnotFound()の代わりにリダイレクト
+    router.push('/not-found');
+    return null;
   }
 
   // チャプターが属するコースを特定
   const course = courses.find(course => 
-    course.chapters.some(ch => ch.id === params.chapterId)
+    course.chapters.some(ch => ch.id === chapterId)
   );
 
   const handleSlideComplete = () => {
-    router.push(`/chapters/${params.chapterId}/editor`);
+    router.push(`/chapters/${chapterId}/editor`);
   };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Navigation course={course} currentChapterId={params.chapterId} />
+      <Navigation course={course} currentChapterId={chapterId} />
       
       <main className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
@@ -39,7 +43,7 @@ export default function ChapterPage({ params }: { params: { chapterId: string } 
           
           <SlideShow
             slides={chapter.slides}
-            chapterId={params.chapterId}
+            chapterId={chapterId}
             onComplete={handleSlideComplete}
           />
         </div>

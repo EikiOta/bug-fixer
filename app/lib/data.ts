@@ -5,7 +5,7 @@ export const courses: Course[] = [
     id: "javascript-debugging",
     title: "JavaScriptデバッグ入門",
     description: "console.logを使ったデバッグ手法を学びましょう",
-    thumbnail: "/images/js-debug.png",
+    thumbnail: "/api/placeholder/400/320", // プレースホルダー画像に変更
     chapters: [
       {
         id: "chapter-1",
@@ -416,7 +416,7 @@ export function getChapterById(chapterId: string): Chapter | undefined {
   return undefined;
 }
 
-// ダミー画像のURLを生成する関数（実際のプロジェクトでは実際の画像を使用すること）
+// ダミー画像のURLを生成する関数
 export function generateDummyImageUrl(): string {
   return `/api/placeholder/400/320`;
 }

@@ -38,8 +38,6 @@ export function executeCode(code: string): { output: string[], error: string | n
   return { output, error };
 }
 
-'use client';
-
 // バグが修正されたかをチェックする関数
 export function checkSolution(code: string, expectedOutput: string): boolean {
   const { output } = executeCode(code);
